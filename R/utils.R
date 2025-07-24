@@ -66,7 +66,7 @@ DNAStringSet2GRanges <- function(seqs) {
         names(seqs), 
         IRanges::IRanges(1, width = lengths(seqs))
     )
-    GenomeInfoDb::seqlengths(g) <- lengths(seqs)
+    Seqinfo::seqlengths(g) <- lengths(seqs)
     return(g)
 }
 

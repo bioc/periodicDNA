@@ -91,7 +91,7 @@ getCovMatrix <- function(g, bw, norm = 'none', verbose = FALSE) {
     g <- IRanges::subsetByOverlaps(
         g, 
         GenomicRanges::GRanges(
-            GenomeInfoDb::seqlevels(bw), 
+            Seqinfo::seqlevels(bw), 
             IRanges::IRanges(1, width = lengths(bw))
         ), 
         type = 'within'

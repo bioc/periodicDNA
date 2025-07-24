@@ -31,7 +31,7 @@
 #' @import IRanges
 #' @import BiocParallel
 #' @import BSgenome
-#' @import GenomeInfoDb
+#' @import Seqinfo
 #' @importFrom rtracklayer export.bw
 #' @importFrom methods is
 #' @export
@@ -98,7 +98,7 @@ getPeriodicityTrack <- function(
     }
     
     # Partition the genome
-    GenomeInfoDb::isCircular(seqinfo(granges)) <- NA
+    Seqinfo::isCircular(seqinfo(granges)) <- NA
     granges <- reduce(GRanges(granges, strand = '*'))
     granges_extended <- GenomicRanges::resize(
         granges, extension, fix = 'center'
@@ -215,7 +215,7 @@ partitionGenome <- function(
     step_size
 ) 
 {
-    genome_Seqinfo <- GenomeInfoDb::Seqinfo(
+    genome_Seqinfo <- Seqinfo::Seqinfo(
         seqnames = names(genome), 
         seqlengths = lengths(genome), 
         isCircular = rep(FALSE, length(genome))
@@ -223,9 +223,9 @@ partitionGenome <- function(
     genome_granges <- GenomicRanges::GRanges(
         seqnames = GenomicRanges::seqnames(genome_Seqinfo), 
         IRanges::IRanges(start = rep(1, length(genome_Seqinfo)), 
-        width = GenomeInfoDb::seqlengths(genome_Seqinfo))
+        width = Seqinfo::seqlengths(genome_Seqinfo))
     )
-    GenomeInfoDb::seqinfo(genome_granges) <- genome_Seqinfo
+    Seqinfo::seqinfo(genome_granges) <- genome_Seqinfo
     granges_partionned <- GenomicRanges::slidingWindows(
         GenomicRanges::reduce(granges_extended_large), 
         window_size, 
@@ -233,7 +233,7 @@ partitionGenome <- function(
     ) %>% 
         GenomicRanges::GRangesList() %>% 
         unlist()
-    GenomeInfoDb::seqinfo(granges_partionned) <- genome_Seqinfo
+    Seqinfo::seqinfo(granges_partionned) <- genome_Seqinfo
     granges_partionned <- GenomicRanges::trim(granges_partionned)
     granges_partionned <- granges_partionned[
         GenomicRanges::width(granges_partionned) == window_size
